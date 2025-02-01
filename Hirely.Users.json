@@ -1,0 +1,15 @@
+[{
+  "_id": {
+    "$oid": "679ea68f52535c1c9c88235e"
+  },
+  "email": "EwanBelshaw@gmail.com",
+  "name": "Ewan Belshaw",
+  "skills": [
+    "C",
+    "C++",
+    "MongoDB"
+  ],
+  "yoe": 0,
+  "education": "Bachelors",
+  "location": "Montreal"
+}]
