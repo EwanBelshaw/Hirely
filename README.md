@@ -1,12 +1,15 @@
 # Hirely
 Tinder for jobs
 
+Design:
+Figma - Aalok
+
 Front end:
-ReactJS
-ExpressJS
+ReactJS - Luc, Apoorva
+ExpressJS - Luc, Apoorva
 
 Back end:
-NodeJS
+NodeJS - Ewan
 
 Database: 
-Mongo DB
+Mongo DB - Ewan
