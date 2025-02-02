@@ -104,7 +104,7 @@ const Messages = () => {
     {
       id: 1,
       company: "Tech Corp",
-      avatar: "/api/placeholder/48/48",
+      avatar: "https://api.dicebear.com/9.x/adventurer/svg?seed=Felixsh",
       lastMessage: "Thanks for your interest! When are you available for an interview?",
       time: "2m ago",
       unread: true
@@ -112,7 +112,7 @@ const Messages = () => {
     {
       id: 2,
       company: "Startup Inc",
-      avatar: "/api/placeholder/48/48",
+      avatar: "https://api.dicebear.com/9.x/adventurer/svg?seed=BRUV",
       lastMessage: "Hi! We'd love to discuss the position with you.",
       time: "1h ago",
       unread: false
@@ -164,7 +164,7 @@ const Profile = () => {
       <div className="bg-white rounded-xl shadow-sm p-6 text-center relative">
         <div className="mb-6">
           <div className="w-24 h-24 mx-auto relative">
-            <img src="/api/placeholder/96/96" alt="" className="w-24 h-24 rounded-full object-cover" />
+            <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=IamAndIShallBeAnother" alt="" className="w-24 h-24 rounded-full object-cover" />
             <button className="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full shadow-lg">
               <User className="w-4 h-4" />
             </button>
@@ -328,8 +328,15 @@ const SearchFilters = ({ onSearch, onFilter }) => {
             <select className="w-full p-3 rounded-xl border border-gray-200 text-lg">
               <option>All Locations</option>
               <option>Remote</option>
-              <option>San Francisco</option>
-              <option>New York</option>
+              <option>Montreal</option>
+              <option>Quebec City</option>
+              <option>Laval</option>
+              <option>Gatineau</option>
+              <option>Longueuil</option>
+              <option>Sherbrooke</option>
+              <option>Levis</option>
+              <option>Trois-Rivieres</option>
+              <option>Remote</option>
             </select>
           </div>
           <div>
@@ -352,7 +359,7 @@ const Matches = ({ matches }) => (
     {matches.map((match) => (
       <div key={match.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
         <div className="flex items-center gap-4">
-          <img src="/api/placeholder/48/48" alt="" className="w-12 h-12 rounded-full" />
+          <img src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${match.id}`} alt="" className="w-12 h-12 rounded-full" />
           <div className="flex-1">
             <h3 className="font-semibold text-gray-800 mb-1">{match.company}</h3>
             <p className="text-sm text-gray-600">{match.position}</p>
