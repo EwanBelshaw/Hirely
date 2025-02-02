@@ -22,7 +22,12 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/myapp', {
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  userType: {  type: String, required: true, enum: ["recruiter", "jobSeeker"]},
+  education: { type: String, required: 
+  function() { return this.userType === "jobSeeker";}, // Only requires education if usertype is a jobSeeker 
+  enum: ["Bachelor", "Master", "PHD"]}
+
 });
 
 const User = mongoose.model('User', userSchema);
