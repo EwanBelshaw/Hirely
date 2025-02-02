@@ -1,0 +1,213 @@
+[
+    {
+      "id": 1,
+      "company": "DeepTech Solutions",
+      "position": "Deep Learning Infrastructure Engineer",
+      "location": "Montreal, QC",
+      "salary": "$120k",
+      "description": "Design and optimize infrastructure for deep learning models.",
+      "requirements": [
+        "Python",
+        "C++",
+        "CUDA"
+      ]
+    },
+    {
+      "id": 2,
+      "company": "AI Innovations",
+      "position": "AI Model Optimization Engineer",
+      "location": "Quebec City, QC",
+      "salary": "$110k",
+      "description": "Optimize AI models for performance and efficiency.",
+      "requirements": [
+        "Python",
+        "Rust"
+      ]
+    },
+    {
+      "id": 3,
+      "company": "CloudScale Systems",
+      "position": "Site Reliability Engineer (SRE)",
+      "location": "Laval, QC",
+      "salary": "$130k",
+      "description": "Ensure the reliability and performance of systems, with an emphasis on scalability.",
+      "requirements": [
+        "Python",
+        "Go"
+      ]
+    },
+    {
+      "id": 4,
+      "company": "StreamTech",
+      "position": "Streaming Data Processing Engineer",
+      "location": "Gatineau, QC",
+      "salary": "$125k",
+      "description": "Build and optimize real-time streaming data processing pipelines.",
+      "requirements": [
+        "Scala",
+        "Python"
+      ]
+    },
+    {
+      "id": 5,
+      "company": "NextGen Backend",
+      "position": "High-Performance Backend Engineer",
+      "location": "Sherbrooke, QC",
+      "salary": "$115k",
+      "description": "Develop high-performance backend systems and microservices.",
+      "requirements": [
+        "C++",
+        "Rust"
+      ]
+    },
+    {
+      "id": 6,
+      "company": "ScalableTech",
+      "position": "Event-Driven Architecture Developer",
+      "location": "Trois-Rivières, QC",
+      "salary": "$100k",
+      "description": "Design and implement event-driven architectures for scalable systems.",
+      "requirements": [
+        "Java",
+        "Go"
+      ]
+    },
+    {
+      "id": 7,
+      "company": "CloudWave",
+      "position": "Serverless API Engineer",
+      "location": "Drummondville, QC",
+      "salary": "$105k",
+      "description": "Build and maintain serverless APIs for cloud applications.",
+      "requirements": [
+        "JavaScript",
+        "Python"
+      ]
+    },
+    {
+      "id": 8,
+      "company": "Blockchain Secure",
+      "position": "Blockchain Security Developer",
+      "location": "Saguenay, QC",
+      "salary": "$125k",
+      "description": "Secure blockchain platforms and smart contracts.",
+      "requirements": [
+        "Rust",
+        "Go",
+        "C++"
+      ]
+    },
+    {
+      "id": 9,
+      "company": "FullStack Systems",
+      "position": "Full-Stack Systems Engineer",
+      "location": "Saint-Jean-sur-Richelieu, QC",
+      "salary": "$90k",
+      "description": "Build and maintain scalable web applications with modern technologies.",
+      "requirements": [
+        "JavaScript",
+        "TypeScript",
+        "Go"
+      ]
+    },
+    {
+      "id": 10,
+      "company": "Cloud Native Solutions",
+      "position": "Cloud-Native Software Engineer",
+      "location": "Granby, QC",
+      "salary": "$100k",
+      "description": "Develop cloud-native applications leveraging containerization and orchestration.",
+      "requirements": [
+        "Go",
+        "Rust"
+      ]
+    },
+    {
+      "id": 11,
+      "company": "GPUSpeed",
+      "position": "GPU Computing Engineer",
+      "location": "Blainville, QC",
+      "salary": "$105k",
+      "description": "Work on GPU computing frameworks to accelerate complex workloads.",
+      "requirements": [
+        "C++",
+        "CUDA"
+      ]
+    },
+    {
+      "id": 12,
+      "company": "Blockchain Secure",
+      "position": "Blockchain Security Developer",
+      "location": "Joliette, QC",
+      "salary": "$115k",
+      "description": "Develop and secure blockchain solutions.",
+      "requirements": [
+        "Go",
+        "Rust",
+        "C++"
+      ]
+    },
+    {
+      "id": 13,
+      "company": "DistributedTech",
+      "position": "Distributed Systems Developer",
+      "location": "Rimouski, QC",
+      "salary": "$115k",
+      "description": "Design and develop scalable distributed systems for large-scale applications.",
+      "requirements": [
+        "Java",
+        "Go",
+        "Scala"
+      ]
+    },
+    {
+      "id": 14,
+      "company": "KubeWorks",
+      "position": "Kubernetes Automation Specialist",
+      "location": "Shawinigan, QC",
+      "salary": "$95k",
+      "description": "Automate and manage Kubernetes-based containerized environments.",
+      "requirements": [
+        "Go",
+        "Shell"
+      ]
+    },
+    {
+      "id": 15,
+      "company": "DataOpt Solutions",
+      "position": "Data Pipeline Optimization Engineer",
+      "location": "Saint-Jérôme, QC",
+      "salary": "$105k",
+      "description": "Optimize data pipelines for performance and scalability.",
+      "requirements": [
+        "Python",
+        "Java",
+        "Scala"
+      ]
+    },
+    {
+      "id": 16,
+      "company": "CyberShield",
+      "position": "Zero Trust Architect",
+      "location": "Victoriaville, QC",
+      "salary": "$140k",
+      "description": "Design security architectures for zero trust environments.",
+      "requirements": [
+        "C#",
+        "Go",
+        "Rust"
+      ]
+    },
+    {
+      "id": 17,
+      "company": "UIX Labs",
+      "position": "Interactive UI Engineer",
+      "location": "Thetford Mines, QC",
+      "salary": "$95k",
+      "description": "Develop interactive and user-friendly interfaces for web applications.",
+      "requirements": [
+        "JavaScript",
+        "TypeScript"
+      ]
+    }
+  ]

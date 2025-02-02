@@ -421,28 +421,9 @@ const JobMatchingApp = () => {
     { id: 2, company: 'Startup Inc', position: 'Frontend Engineer' }
   ]);
 
-  const [jobs] = useState([
-    {
-      id: 1,
-      company: "Tech Corp",
-      position: "Senior React Developer",
-      location: "San Francisco, CA",
-      salary: "$120k - $150k",
-      description: "We're looking for an experienced React developer to join our team and help build cutting-edge web applications. You'll work with modern technologies and contribute to our growing platform.",
-      requirements: ["5+ years React", "TypeScript", "Node.js"],
-      location: "Longueil, QC"
-    },
-    {
-      id: 2,
-      company: "Startup Inc",
-      position: "Frontend Engineer",
-      location: "Remote",
-      salary: "$90k - $120k",
-      description: "Join our fast-growing startup as a frontend engineer. Help shape our product from the ground up and work with a talented team of developers.",
-      requirements: ["3+ years React", "CSS/SASS", "REST APIs"],
-      location: "Joliette, QC"
-    }
-  ]);
+  const [jobs] = useState(
+    require('./jobsData.json')
+  );
 
   const handleTouchStart = (e) => {
     setStartX(e.touches[0].clientX);
