@@ -281,6 +281,24 @@ const JobMatchingApp = () => {
   const [showMatch, setShowMatch] = useState(false);
 
   const [userLocation, setUserLocation] = useState(null);
+
+  const [apiData, setApiData] = useState(""); // Save API response
+
+  // Function to fetch API data
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/test`);
+      const data = await response.json();
+      setApiData(data); // Store in variable (state)
+    } catch (error) {
+      console.error("Error fetching /test:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(); // Call API on component mount
+  }, []);
+
   useEffect(() => {
     const getUserLocation = () => {
       if (navigator.geolocation) {
@@ -397,6 +415,7 @@ const JobMatchingApp = () => {
       <nav className="bg-white shadow-md p-4 mb-6">
         <div className="max-w-screen-xl mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          {apiData}
             JobSwipe
           </h1>
           <div className="flex gap-3">

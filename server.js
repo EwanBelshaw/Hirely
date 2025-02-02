@@ -48,6 +48,16 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('Users', userSchema);
 
 // Routes
+// Get all users
+app.get('/test', async (req, res) => {
+  try {
+    res.json("TEST, Dont mind me");
+    // res.json({"Bruvss": "vdsf"});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 // Get all users
 app.get('/Hirely/Users', async (req, res) => {
@@ -196,6 +206,6 @@ async function createTestUser() {
 }
 
 // Example usage
-getTravelTime({ lat: 45.4852608, lng: -73.5838208 }, 'Los Angeles, CA')
-  .then(time => console.log('Travel time:', time))
-  .catch(error => console.error('Error:', error));
+// getTravelTime({ lat: 45.4852608, lng: -73.5838208 }, 'Los Angeles, CA')
+//   .then(time => console.log('Travel time:', time))
+//   .catch(error => console.error('Error:', error));
