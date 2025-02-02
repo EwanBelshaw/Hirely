@@ -489,8 +489,7 @@ const JobMatchingApp = () => {
       <nav className="bg-white shadow-md p-4 mb-6">
         <div className="max-w-screen-xl mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          {apiData}
-            JobSwipe
+            Hirely
           </h1>
           <div className="flex gap-3">
             <button className="relative">
