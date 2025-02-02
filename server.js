@@ -47,6 +47,100 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('Users', userSchema);
 
+const jobSchema = new mongoose.Schema({
+
+  jobRoleName: {type: String, required: true, enum: ["Software Solutions Architect", "Full-Stack Systems Engineer", "Distributed Systems Developer", "AI Model Optimization Engineer", "Deep Learning Infrastructure Engineer", "Prompt Engineering Specialist", "Cloud-Native Software Engineer", "Kubernetes Automation Specialist", "Site Reliability Engineer (SRE)", "Data Engineering Architect", "Streaming Data Processing Engineer", "Data Pipeline Optimization Engineer", "GPU Computing Engineer", "CUDA Optimization Specialist", "Embedded AI Engineer", "Application Security Engineer", "Zero Trust Architect", "Blockchain Security Developer", "Interactive UI Engineer", "Web Performance Optimization Engineer", "Accessibility-Focused Frontend Developer", "High-Performance Backend Engineer", "Event-Driven Architecture Developer", "Serverless API Engineer"]},
+  jobID: {type: String, required: true, unique: true}, // random # between 1 - 1000
+  jobPay: {type: Number, required: true}, // Random 
+  jobLocation: { type: String}, // longitude,latitude, locations in/near montreal
+  description: { type: String, required: true}, // General job description
+  tags: {type: [String],  enum: ["Python", "JavaScript", "TypeScript", "Java", "C++", "C#", "Go", "Rust", "Swift", "Kotlin", "Ruby", "PHP", "Dart", "R", "Scala", "Perl", "Haskell", "Elixir", "Lua", "Shell", "MATLAB", "Objective-C", "F#", "Erlang"]}
+
+});
+
+const Jobs = mongoose.model('Jobs', jobSchema);
+// Create job
+app.post('/Hirely/Jobs', async (req, res) => {
+  try {
+    const newJob = new Jobs(req.body);
+    const savedJob = await newJob.save();
+    res.status(201).json(savedJob);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// Get all jobs
+app.get('/Hirely/Jobs', async (req, res) => {
+  try {
+    const jobs = await Jobs.find();
+    res.json(jobs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get single job
+app.get('/Hirely/Jobs/:id', async (req, res) => {
+  try {
+    const job = await Jobs.findById(req.params.id);
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+    res.json(job);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+// Helper to get distance in meters using Google Maps Distance Matrix
+async function getDistanceInMeters(origin, destination) {
+  return Math.floor(Math.random() * 10000) + 1; // Returns a random distance in meters
+}
+
+// Async function to rank jobs based on user profile and distance
+async function rankJobs(user, jobs) {
+  const ranked = [];
+  for (const job of jobs) {
+    let score = 0;
+    if (user.education && job.tags.includes(user.education)) score += 10;
+    if (user.experience_years && job.jobPay >= user.experience_years * 10000) score += 5;
+    if (user.swipedJobsID && !user.swipedJobsID.includes(job.jobID)) score += 15;
+    if (user.location && job.jobLocation) {
+      const distance = await getDistanceInMeters(user.location, job.jobLocation);
+      // Example: add more points if distance is small
+      if (distance < 5000) score += 20;
+      else if (distance < 20000) score += 10;
+    }
+    ranked.push({ job, score });
+  }
+  return ranked.sort((a, b) => b.score - a.score);
+}
+
+// Get ranked jobs for a user
+app.get('/Hirely/RankedJobs/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    const jobs = await Jobs.find();
+    const rankedJobs = await rankJobs(user, jobs);
+    res.json(rankedJobs.map(r => r.job));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get next few ranked jobs for swiping
+app.get('/Hirely/NextJobs/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    const jobs = await Jobs.find();
+    const rankedJobs = await rankJobs(user, jobs);
+    res.json(rankedJobs.slice(0, 5).map(r => r.job));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 // Routes
 // Get all users
 app.get('/test', async (req, res) => {
