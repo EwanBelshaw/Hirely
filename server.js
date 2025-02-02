@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { Int32 } = require('mongodb');
 require('dotenv').config();
 
 const app = express();
@@ -18,15 +19,27 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/myapp', {
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+
+  
 // User Schema
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
   userType: {  type: String, required: true, enum: ["recruiter", "jobSeeker"]},
-  education: { type: String, required: 
-  function() { return this.userType === "jobSeeker";}, // Only requires education if usertype is a jobSeeker 
-  enum: ["Bachelor", "Master", "PHD"]}
+
+  // jobSeeker specific
+  education: { type: String, required: function() { return this.userType === "jobSeeker";}, // Only requires education if usertype is a jobSeeker 
+  enum: ["Bachelor", "Master", "PHD"]},
+  experience_years: { type: Number, minimum: 0, required: function() { return this.userType === "jobSeeker";},},
+  location: { type: [Number], required: function() { return this.userType === "jobSeeker";},},
+
+  // recruiter specific
+  company_info: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  company_size: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  salary_range: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  likes_received_company: { type: Number, required: function() { return this.userType === "recruiter";}, optional: true }
+
 
 });
 
@@ -35,7 +48,7 @@ const User = mongoose.model('Users', userSchema);
 // Routes
 
 // Get all users
-app.get('/Hirely/Users', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -43,6 +56,8 @@ app.get('/Hirely/Users', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 // Get single user
 app.get('/Hirely/Users/:id', async (req, res) => {
