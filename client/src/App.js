@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { X, Heart, User, MessageCircle, Briefcase, MapPin, DollarSign, Building2, Search, Filter, Bell, Star, Check } from 'lucide-react';
+import Messages1 from './components/Messages';
+
 
 const Messages = () => {
   const messages = [
@@ -375,7 +377,7 @@ const JobMatchingApp = () => {
           </div>
         )}
 
-        {currentTab === 'messages' && <Messages />}
+        {currentTab === 'messages' && <Messages1 />}
         {currentTab === 'profile' && <Profile />}
         {currentTab === 'matches' && <Matches matches={matches} />}
       </div>
