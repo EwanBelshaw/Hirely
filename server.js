@@ -30,12 +30,12 @@ const userSchema = new mongoose.Schema({
 
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('Users', userSchema);
 
 // Routes
 
 // Get all users
-app.get('/api/users', async (req, res) => {
+app.get('/Hirely/Users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -45,7 +45,7 @@ app.get('/api/users', async (req, res) => {
 });
 
 // Get single user
-app.get('/api/users/:id', async (req, res) => {
+app.get('/Hirely/Users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
@@ -58,7 +58,7 @@ app.get('/api/users/:id', async (req, res) => {
 });
 
 // Create user
-app.post('/api/users', async (req, res) => {
+app.post('/Hirely/Users', async (req, res) => {
   try {
     const newUser = new User(req.body);
     const savedUser = await newUser.save();
@@ -69,7 +69,7 @@ app.post('/api/users', async (req, res) => {
 });
 
 // Update user
-app.put('/api/users/:id', async (req, res) => {
+app.put('/Hirely/Users/:id', async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
@@ -86,7 +86,7 @@ app.put('/api/users/:id', async (req, res) => {
 });
 
 // Delete user
-app.delete('/api/users/:id', async (req, res) => {
+app.delete('/Hirely/Users/:id', async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
