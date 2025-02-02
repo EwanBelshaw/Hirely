@@ -20,15 +20,28 @@ mongoose.connect(process.env.MONGODB_URI, {
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.error('MongoDB connection error:', err));
 
+
+  
 // User Schema
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
   userType: {  type: String, required: true, enum: ["recruiter", "jobSeeker"]},
-  education: { type: String, required: 
-  function() { return this.userType === "jobSeeker";}, // Only requires education if usertype is a jobSeeker 
-  enum: ["Bachelor", "Master", "PHD"]}
+
+  // jobSeeker specific
+  education: { type: String, required: function() { return this.userType === "jobSeeker";}, // Only requires education if usertype is a jobSeeker 
+  enum: ["Bachelor", "Master", "PHD"]},
+  experience_years: { type: Number, minimum: 0, required: function() { return this.userType === "jobSeeker";},},
+  location: { type: [Number], required: function() { return this.userType === "jobSeeker";},},
+  swipedJobsID: {type: [String]},
+
+  // recruiter specific
+  companyID: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  companySize: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  salaryRange: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  likesReceivedCompany: { type: Number, required: function() { return this.userType === "recruiter";}, optional: true },
+  swipedApplicantsEmail: {type: [String], }
 
 });
 
@@ -47,6 +60,8 @@ app.get('/Hirely/Users', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 // Get single user
 app.get('/Hirely/Users/:id', async (req, res) => {
