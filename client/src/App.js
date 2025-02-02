@@ -335,7 +335,6 @@ const JobMatchingApp = () => {
       salary: "$120k - $150k",
       description: "We're looking for an experienced React developer to join our team and help build cutting-edge web applications. You'll work with modern technologies and contribute to our growing platform.",
       requirements: ["5+ years React", "TypeScript", "Node.js"],
-      distance: "15 mins",
       location: "Longueil, QC"
     },
     {
@@ -346,7 +345,6 @@ const JobMatchingApp = () => {
       salary: "$90k - $120k",
       description: "Join our fast-growing startup as a frontend engineer. Help shape our product from the ground up and work with a talented team of developers.",
       requirements: ["3+ years React", "CSS/SASS", "REST APIs"],
-      distance: "1hr+",
       location: "Joliette, QC"
     }
   ]);
@@ -415,7 +413,7 @@ const JobMatchingApp = () => {
       <nav className="bg-white shadow-md p-4 mb-6">
         <div className="max-w-screen-xl mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          {apiData}
+          {/* {apiData} */}
             JobSwipe
           </h1>
           <div className="flex gap-3">
