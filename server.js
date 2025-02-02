@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
@@ -11,7 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/myapp', {
+// console.log("KILL:"+ process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -38,7 +40,9 @@ const User = mongoose.model('Users', userSchema);
 app.get('/Hirely/Users', async (req, res) => {
   try {
     const users = await User.find();
+    console.log("BRUVVV:" + users);
     res.json(users);
+    // res.json({"Bruvss": "vdsf"});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -109,3 +113,74 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+// Route to get travel time
+app.get('/Hirely/TravelTime', async (req, res) => {
+  const { origin, destination, mode } = req.query;
+
+  if (!origin || !destination) {
+    return res.status(400).json({ message: 'Origin and destination are required' });
+  }
+
+  try {
+    const travelTime = await getTravelTime(origin, destination, mode);
+    res.json({ travelTime });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+async function getTravelTime(origin, destination, mode = 'driving') {
+  try {
+    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+    const response = await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
+      params: {
+        origins: typeof origin === 'string' ? origin : `${origin.lat},${origin.lng}`,
+        destinations: typeof destination === 'string' ? destination : `${destination.lat},${destination.lng}`,
+        mode: mode,
+        key: apiKey
+      }
+    });
+    console.log("RESPONSE:" + JSON.stringify(response.data));
+    const data = response.data;
+    
+    // Check if rows and elements exist
+    if (data.rows && data.rows[0] && data.rows[0].elements && data.rows[0].elements[0]) {
+      const element = data.rows[0].elements[0];
+      
+      // Check if status is OK
+      if (element.status === 'OK') {
+        const duration = element.duration.text;
+        return duration;
+      } else {
+        throw new Error('Unable to find the route');
+      }
+    } else {
+      throw new Error('Invalid response structure');
+    }
+  } catch (error) {
+    console.error('Error fetching travel time:', error);
+    throw error;
+  }
+}
+
+
+async function createTestUser() {
+  try {
+    const testUser = new User({
+      name: "Test User 2",
+      email: "testuser@example.com2 ",
+      userType: "recruiter",
+      education: "Bachelor"
+    });
+    const savedUser = await testUser.save();
+    console.log("Test user created:", savedUser);
+  } catch (error) {
+    console.error("Error creating test user:", error);
+  }
+}
+
+// Example usage
+getTravelTime({ lat: 45.4852608, lng: -73.5838208 }, 'Los Angeles, CA')
+  .then(time => console.log('Travel time:', time))
+  .catch(error => console.error('Error:', error));

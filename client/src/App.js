@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Heart, User, MessageCircle, Briefcase, MapPin, DollarSign, Building2, Search, Filter, Bell, Star, Check } from 'lucide-react';
 import Messages1 from './components/Messages';
+
 
 
 const Messages = () => {
@@ -116,56 +117,91 @@ const Profile = () => {
   );
 };
 
-const JobCard = ({ job, offsetX = 0, swipeDirection, handleTouchStart, handleTouchMove, handleTouchEnd, isDragging }) => (
-  <div
-    className={`transform transition-all duration-300 touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-    style={{
-      transform: `translateX(${offsetX}px) rotate(${offsetX * 0.1}deg)`,
-    }}
-    onTouchStart={handleTouchStart}
-    onTouchMove={handleTouchMove}
-    onTouchEnd={handleTouchEnd}
-  >
-    <div className={`relative bg-white rounded-xl shadow-lg p-6 mb-4 overflow-hidden
-      ${swipeDirection === 'right' ? 'bg-green-50' : swipeDirection === 'left' ? 'bg-red-50' : ''}`}>
-      <div className="absolute top-4 right-4 bg-indigo-100 px-4 py-1 rounded-full">
-        <span className="text-indigo-600 text-sm font-medium">{job.company}</span>
-      </div>
+const JobCard = ({ job, offsetX = 0, swipeDirection, handleTouchStart, handleTouchMove, handleTouchEnd, isDragging, userLocation }) => {
+  const [travelTime, setTravelTime] = useState(null);
 
-      <h2 className="text-2xl font-bold text-gray-800 mb-4 mt-2 pr-32">{job.position}</h2>
+  useEffect(() => {
+    const fetchTravelTime = async () => {
+      if (userLocation) {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/Hirely/TravelTime?origin=${userLocation.latitude},${userLocation.longitude}&destination=${job.location}&mode=driving`);
+          const data = await response.json();
+          setTravelTime(data.travelTime);
+        } catch (error) {
+          console.error('Error fetching travel time:', error);
+        }
+      }
+    };
 
-      <div className="space-y-3 mb-6">
-        <div className="flex items-center text-gray-600">
-          <Building2 className="w-5 h-5 mr-3 flex-shrink-0" />
-          <span className="text-lg">{job.company}</span>
+    fetchTravelTime();
+  }, [userLocation, job.location]);
+
+  return (
+    <div
+      className={`transform transition-all duration-300 touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      style={{
+        transform: `translateX(${offsetX}px) rotate(${offsetX * 0.1}deg)`,
+      }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div className={`relative bg-white rounded-xl shadow-lg p-6 mb-4 overflow-hidden
+        ${swipeDirection === 'right' ? 'bg-green-50' : swipeDirection === 'left' ? 'bg-red-50' : ''}`}>
+        <div className="absolute top-4 right-4 bg-indigo-100 px-4 py-1 rounded-full">
+          <span className="text-indigo-600 text-sm font-medium">{job.company}</span>
         </div>
-        <div className="flex items-center text-gray-600">
-          <MapPin className="w-5 h-5 mr-3 flex-shrink-0" />
-          <span className="text-lg">{job.location}</span>
-        </div>
-        <div className="flex items-center text-gray-600">
-          <DollarSign className="w-5 h-5 mr-3 flex-shrink-0" />
-          <span className="text-lg">{job.salary}</span>
-        </div>
-      </div>
 
-      <div className="bg-indigo-50 rounded-lg p-4 mb-6">
-        <p className="text-gray-700 leading-relaxed">{job.description}</p>
-      </div>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 mt-2 pr-32">{job.position}</h2>
 
-      <div>
-        <h4 className="font-semibold mb-3 text-gray-800 text-lg">Requirements:</h4>
-        <div className="flex flex-wrap gap-2">
-          {job.requirements.map((req, index) => (
-            <span key={index} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
-              {req}
+        <div className="space-y-3 mb-6">
+          <div className="flex items-center text-gray-600">
+            <Building2 className="w-5 h-5 mr-3 flex-shrink-0" />
+            <span className="text-lg">{job.company}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <MapPin className="w-5 h-5 mr-3 flex-shrink-0" />
+            <span className="text-lg">{job.location}</span>
+          </div>
+          <div className="flex items-center text-gray-600">
+            <DollarSign className="w-5 h-5 mr-3 flex-shrink-0" />
+            <span className="text-lg">{job.salary}</span>
+          </div>
+        </div>
+
+        <div className="bg-indigo-50 rounded-lg p-4 mb-6">
+          <p className="text-gray-700 leading-relaxed">{job.description}</p>
+        </div>
+        <div>
+          <div className="flex flex-wrap gap-2">
+            <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+              travelTime ? (
+                travelTime.includes('hour') || travelTime.includes('day') ? 'bg-red-100 text-red-700' :
+                parseInt(travelTime) > 20 ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700'
+              ) : 'bg-gray-100 text-gray-700'
+            }`}>
+              {travelTime ? (
+                <>
+                  <span className="mr-2">🚗: {travelTime}</span>
+                </>
+              ) : 'Calculating travel time...'}
             </span>
-          ))}
+          </div>
+        </div>
+        <div>
+          <h4 className="font-semibold mb-3 text-gray-800 text-lg">Requirements:</h4>
+          <div className="flex flex-wrap gap-2">
+            {job.requirements.map((req, index) => (
+              <span key={index} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
+                {req}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SearchFilters = ({ onSearch, onFilter }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -244,6 +280,29 @@ const JobMatchingApp = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [showMatch, setShowMatch] = useState(false);
 
+  const [userLocation, setUserLocation] = useState(null);
+  useEffect(() => {
+    const getUserLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setUserLocation({ latitude, longitude });
+            console.log("Latitude:", latitude, "Longitude:", longitude);
+          },
+          (err) => {
+            setError("Error getting location: " + err.message);
+            console.error("Error getting location:", err);
+          }
+        );
+      } else {
+        setError("Geolocation is not supported by this browser.");
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    getUserLocation();
+  }, []);
   const [matches] = useState([
     { id: 1, company: 'Tech Corp', position: 'Senior React Developer' },
     { id: 2, company: 'Startup Inc', position: 'Frontend Engineer' }
@@ -258,6 +317,8 @@ const JobMatchingApp = () => {
       salary: "$120k - $150k",
       description: "We're looking for an experienced React developer to join our team and help build cutting-edge web applications. You'll work with modern technologies and contribute to our growing platform.",
       requirements: ["5+ years React", "TypeScript", "Node.js"],
+      distance: "15 mins",
+      location: "Longueil, QC"
     },
     {
       id: 2,
@@ -267,6 +328,8 @@ const JobMatchingApp = () => {
       salary: "$90k - $120k",
       description: "Join our fast-growing startup as a frontend engineer. Help shape our product from the ground up and work with a talented team of developers.",
       requirements: ["3+ years React", "CSS/SASS", "REST APIs"],
+      distance: "1hr+",
+      location: "Joliette, QC"
     }
   ]);
 
@@ -353,6 +416,7 @@ const JobMatchingApp = () => {
             <SearchFilters onSearch={() => {}} onFilter={() => {}} />
             <JobCard
               job={jobs[currentIndex]}
+              userLocation={userLocation}
               offsetX={offsetX}
               swipeDirection={swipeDirection}
               handleTouchStart={handleTouchStart}
