@@ -1,9 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import { X, Heart, User, MessageCircle, Briefcase, MapPin, DollarSign, Building2, Search, Filter, Bell, Star, Check } from 'lucide-react';
-import Messages1 from './components/Messages';
+import { X, Heart, User, MessageCircle, Briefcase, MapPin, DollarSign, Building2, Search, Filter, Bell, Star, Check, Send } from 'lucide-react';
+import OpenAI from 'openai';
 
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true
+});
 
+const AIChatBot = () => {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
+  const systemMessage = {
+    role: "system",
+    content: "You are a career coach AI assistant specialized in tech jobs. Help users with: "
+      + "- Resume reviews and optimization tips\n"
+      + "- Technical interview preparation\n"
+      + "- Networking strategies\n"
+      + "- Recruiter communication\n"
+      + "- Job search strategies\n"
+      + "- Salary negotiation tips\n"
+      + "Keep responses professional yet friendly. Ask clarifying questions when needed."
+  };
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { role: "user", content: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [systemMessage, ...messages, userMessage],
+        temperature: 0.7,
+      });
+
+      const aiMessage = {
+        role: "assistant",
+        content: completion.choices[0].message.content
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("AI Error:", error);
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: "Sorry, I'm having trouble connecting. Please try again later."
+      }]);
+    }
+    setIsLoading(false);
+  };
+
+  return (
+    <div className="h-[calc(100vh-180px)] flex flex-col p-4">
+      <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+        {messages.map((msg, index) => (
+          <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div className={`max-w-[80%] p-4 rounded-xl ${
+              msg.role === 'user' 
+                ? 'bg-indigo-600 text-white' 
+                : 'bg-white shadow-sm border border-gray-100'
+            }`}>
+              <p className="whitespace-pre-wrap">{msg.content}</p>
+            </div>
+          </div>
+        ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="bg-white shadow-sm border border-gray-100 p-4 rounded-xl">
+              <div className="animate-pulse">Thinking...</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          placeholder="Ask about resume tips, interviews, or career advice..."
+          className="flex-1 p-4 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          onClick={handleSend}
+          disabled={isLoading}
+          className="p-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+        >
+          <Send className="w-5 h-5" />
+        </button>
+      </div>
+    </div>
+  );
+};
 const Messages = () => {
   const messages = [
     {
@@ -335,7 +430,6 @@ const JobMatchingApp = () => {
       salary: "$120k - $150k",
       description: "We're looking for an experienced React developer to join our team and help build cutting-edge web applications. You'll work with modern technologies and contribute to our growing platform.",
       requirements: ["5+ years React", "TypeScript", "Node.js"],
-      distance: "15 mins",
       location: "Longueil, QC"
     },
     {
@@ -346,7 +440,6 @@ const JobMatchingApp = () => {
       salary: "$90k - $120k",
       description: "Join our fast-growing startup as a frontend engineer. Help shape our product from the ground up and work with a talented team of developers.",
       requirements: ["3+ years React", "CSS/SASS", "REST APIs"],
-      distance: "1hr+",
       location: "Joliette, QC"
     }
   ]);
@@ -460,7 +553,7 @@ const JobMatchingApp = () => {
           </div>
         )}
 
-        {currentTab === 'messages' && <Messages1 />}
+        {currentTab === 'chat' && <AIChatBot />}
         {currentTab === 'profile' && <Profile />}
         {currentTab === 'matches' && <Matches matches={matches} />}
       </div>
@@ -470,7 +563,7 @@ const JobMatchingApp = () => {
           {[
             { id: 'jobs', icon: Briefcase, label: 'Jobs' },
             { id: 'matches', icon: Star, label: 'Matches' },
-            { id: 'messages', icon: MessageCircle, label: 'Messages' },
+            { id: 'chat', icon: MessageCircle, label: 'Career Coach' },
             { id: 'profile', icon: User, label: 'Profile' }
           ].map(({ id, icon: Icon, label }) => (
             <button
