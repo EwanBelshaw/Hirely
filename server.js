@@ -33,13 +33,14 @@ const userSchema = new mongoose.Schema({
   enum: ["Bachelor", "Master", "PHD"]},
   experience_years: { type: Number, minimum: 0, required: function() { return this.userType === "jobSeeker";},},
   location: { type: [Number], required: function() { return this.userType === "jobSeeker";},},
+  swipedJobsID: {type: [String]},
 
   // recruiter specific
-  company_info: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
-  company_size: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
-  salary_range: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
-  likes_received_company: { type: Number, required: function() { return this.userType === "recruiter";}, optional: true }
-
+  companyID: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  companySize: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  salaryRange: { type: String, required: function() { return this.userType === "recruiter";}, optional: true },
+  likesReceivedCompany: { type: Number, required: function() { return this.userType === "recruiter";}, optional: true },
+  swipedApplicantsEmail: {type: [String], }
 
 });
 
